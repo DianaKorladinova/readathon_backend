@@ -27,6 +27,19 @@ router.post('/add', function (req, res, ignore) {
     })
 })
 
+router.get('/check-eligibility', function (req, res, ignore) {
+    book.countDocuments({date: {"$gt": new Date()}}, function (err, count) {
+        if (err) {
+            res.status(400).json({
+                message: "Error while checking eligibility"
+            })
+        } else {
+            res.status(200).json({eligible: count < process.env.BOOKS_PER_MONTH, count})
+        }
+        console.log('there are %d entries for next month', count);
+    });
+})
+
 router.get("/history-lane", function (req, res, ignore) {
     book.find({}, function (error, books) {
         if (error) {
@@ -39,7 +52,7 @@ router.get("/history-lane", function (req, res, ignore) {
 })
 
 router.get("/monthly-challenge", function (req, res, ignore) {
-    book.find().sort('-month').limit(8).exec((error, result) => {
+    book.find().sort('-month').limit(process.env.BOOKS_PER_MONTH).exec((error, result) => {
         if (error) {
             res.status(500).json({message: "Error while retrieving books"})
         } else {
