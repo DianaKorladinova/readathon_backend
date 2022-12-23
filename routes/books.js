@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const book = require("../tables/book");
+const user = require("../tables/users");
 
 
 /* Add a book */
@@ -10,9 +11,20 @@ router.post('/add', function (req, res, ignore) {
     date.setMonth(date.getMonth() + 1, 1)
     book.create({
         title, author, ISBN, date, questions
-    }).then((book) => res.status(201).json({
-        message: `Book created`, id: book._id
-    })).catch((error) => {
+    }).then((book) => {
+        user.findOneAndUpdate({username: res.locals.username}, {$inc: {'wins': 1}})
+            .exec((error, _) => {
+                if (error) {
+                    res.status(500).json({
+                        message: `Book inserted, but failed to update user`, id: book._id
+                    })
+                } else {
+                    res.status(201).json({
+                        message: `Book inserted, user updated`, id: book._id
+                    })
+                }
+            });
+    }).catch((error) => {
         if (error["code"] === 11000) {
             res.status(400).json({
                 message: "ISBN provided is already in the database! Go down history lane and make sure your book is new!",
