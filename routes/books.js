@@ -39,6 +39,7 @@ router.post('/add', function (req, res, ignore) {
     })
 })
 
+// check if there are any slots for a winner to enter a book, or we already have next month's books fully selected
 router.get('/check-eligibility', function (req, res, ignore) {
     book.countDocuments({date: {"$gt": new Date()}}, function (err, count) {
         if (err) {
@@ -64,13 +65,14 @@ router.get("/history-lane", function (req, res, ignore) {
 })
 
 router.get("/monthly-challenge", function (req, res, ignore) {
-    book.find().sort('-month').limit(process.env.BOOKS_PER_MONTH).exec((error, result) => {
-        if (error) {
-            res.status(500).json({message: "Error while retrieving books"})
-        } else {
-            res.json({books: result})
-        }
-    });
+    book.find({date: {"$lt": new Date()}}).sort('-month').limit(process.env.BOOKS_PER_MONTH)
+        .exec((error, result) => {
+            if (error) {
+                res.status(500).json({message: "Error while retrieving books"})
+            } else {
+                res.json({books: result})
+            }
+        });
 })
 
 module.exports = router;
