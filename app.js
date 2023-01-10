@@ -3,7 +3,8 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
-const { connect } = require('mongoose')
+const {connect} = require('mongoose')
+
 
 connect(
     `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.sgpqskk.mongodb.net/?retryWrites=true&w=majority`,
@@ -15,7 +16,7 @@ connect(
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const booksRouter = require('./routes/books')
-// const { verify } = require('./middleware/token')
+const { verify } = require('./middleware/token')
 
 const app = express()
 
@@ -29,11 +30,10 @@ app.use(cors({
 }))
 app.use(logger('dev'))
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({extended: false}))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter)
+app.use('/check', verify, indexRouter)
 app.use('/users', usersRouter)
 app.use('/books', booksRouter)
 
