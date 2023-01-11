@@ -5,7 +5,7 @@
     "description": "A monthly readathon challenge",
     "version": "1.0.0"
   },
-  "host": "localhost:8000",
+  "host": "diana.jware-virtual:8443",
   "basePath": "/",
   "schemes": [
     "http"
