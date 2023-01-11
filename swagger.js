@@ -6,7 +6,7 @@ const doc = {
         description: 'A monthly readathon challenge',
     },
     host: 'diana.jware-virtual:8443',
-    schemes: ['http'],
+    schemes: ['https'],
 }
 
 const outputFile = './swagger-output.json';

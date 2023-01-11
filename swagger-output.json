@@ -8,7 +8,7 @@
   "host": "diana.jware-virtual:8443",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/books/add": {
