@@ -5,7 +5,7 @@ const doc = {
         title: 'Readathon',
         description: 'A monthly readathon challenge',
     },
-    host: 'diana.jware-virtual:8443',
+    host: 'diana.jware-virtual.com:8443',
     schemes: ['https'],
 }
 
